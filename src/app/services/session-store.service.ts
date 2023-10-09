@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
 import { User } from 'src/models/models';
 
 const TOKEN_KEY = 'auth-token';

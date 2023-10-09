@@ -16,7 +16,6 @@ import { ToDo } from 'src/models/models';
  */
 export class TodoTableDataSource extends DataSource<ToDo> {
   data: ToDo[] = [];
-  paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
 
   private todoSubj = new BehaviorSubject<ToDo[]>([])
@@ -53,19 +52,5 @@ export class TodoTableDataSource extends DataSource<ToDo> {
   disconnect(): void { }
 
 
-
-
-  /**
-   * Paginate the data (client-side). If you're using server-side pagination,
-   * this would be replaced by requesting the appropriate data from the server.
-   */
-  private getPagedData(data: ToDo[]): ToDo[] {
-    if (this.paginator) {
-      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-      return data.splice(startIndex, this.paginator.pageSize);
-    } else {
-      return data;
-    }
-  }
 
 }

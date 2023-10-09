@@ -134,7 +134,6 @@ export class TodoTableComponent implements AfterViewInit, OnInit {
   private users: ShareUser[] = []
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
 
     merge(this.sort.sortChange, this.todoService.newToDoSub).pipe(
