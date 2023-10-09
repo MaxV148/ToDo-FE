@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Create ToDo</h1>
+<div mat-dialog-content >
+    <form style="display: flex; flex-direction: column; justify-content: center;" [formGroup]="createCategoryForm" novalidate (ngSubmit)="onSubmitCategory()">
+        <mat-form-field style="margin-bottom: 10px;">
+            <input matInput placeholder="Name" formControlName="name" (value)="data.name">
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Create Category</button>
+    </form>
+</div>
+

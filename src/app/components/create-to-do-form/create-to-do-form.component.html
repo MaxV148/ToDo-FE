@@ -1,0 +1,36 @@
+<form [formGroup]="createToDoForm" novalidate (ngSubmit)="onSubmit()">
+    <mat-card class="shipping-card">
+        <mat-card-header>
+            <mat-card-title>Create new ToDo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row">
+                <mat-form-field class="form-margin-right">
+                    <input matInput placeholder="Title" formControlName="title">
+                    <mat-error *ngIf="createToDoForm.controls['title'].hasError('required')">
+                        Title <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="form-margin-right">
+                    <textarea matInput placeholder="Content" formControlName="content"></textarea>
+                    <mat-error *ngIf="createToDoForm.controls['content'].hasError('required')">
+                        Content <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="category" name="category">
+                        <mat-option *ngFor="let category of categories"  [value]="category.ID">
+                            {{category.Name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+               
+            </div>
+        </mat-card-content>
+        <mat-card-actions style="display: flex; justify-content: center;">
+            <button mat-raised-button color="primary" type="submit">Create</button>
+            <button mat-raised-button (click)="openDialog()">Create Category</button>
+        </mat-card-actions>
+    </mat-card>
+</form>

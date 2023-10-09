@@ -1,0 +1,11 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row style="display: flex; justify-content: space-between;">
+        <span>{{currentUser}}</span>
+        <span>ToDo-App</span>
+        <button (click)="logout()" mat-raised-button>Logout</button>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div class="page-row">
+    <app-create-to-do-form></app-create-to-do-form>
+</div>
+<app-todo-table></app-todo-table>
