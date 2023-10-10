@@ -14,6 +14,7 @@ import { SessionStoreService } from 'src/app/services/session-store.service';
 export class RegisterformComponent {
   constructor(private authService: AuthService,private router: Router, private activatedRoute: ActivatedRoute,private storeService: SessionStoreService){}
   private fb = inject(FormBuilder);
+  invalidRegister = false
   registerForm = this.fb.group({
     username: [null, Validators.required],
     password: [null, Validators.required],
@@ -28,8 +29,8 @@ export class RegisterformComponent {
         this.storeService.saveToken(data.token)
         this.storeService.saveUser(data)
         this.router.navigate([""], { relativeTo: this.activatedRoute })
-      },error: err => {
-        console.log(err)
+      },error: _ => {
+        this.invalidRegister = true
       }})
 
     }

@@ -103,10 +103,18 @@ export class CreateToDoFormComponent implements OnInit {
       this.todoService.createToDo(req).subscribe({next: todo => {
         this.todoService.pushNewToDo(todo)
       }})
+      
+      //reset form
       this.createToDoForm.reset()
-      if(!this.createToDoForm.valid){
-        this.createToDoForm.markAllAsTouched()
-      }
+      Object.keys(this.createToDoForm.controls).forEach((key) => {
+        const control = (this.createToDoForm.controls as any)[key];
+        control.markAsPristine();
+        control.markAsUntouched();
+
+        control.setErrors(null)
+        
+    });
+      
       
 
     }

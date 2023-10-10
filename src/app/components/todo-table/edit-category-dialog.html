@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Create ToDo</h1>
 <div mat-dialog-content >
-    <form style="display: flex; flex-direction: column; justify-content: center; flex-grow: 1;" [formGroup]="editCateroyForm"
+    <form style="display: flex; flex-direction: column; justify-content: center; flex-grow: 1;" [formGroup]="editCategoryForm"
         novalidate (ngSubmit)="onSubmitEditCategory()">
         <mat-form-field class="form-margin-right">
             <input matInput placeholder="Title" formControlName="title">
@@ -19,6 +19,7 @@
         <button mat-raised-button color="primary" type="submit">Edit Category</button>
         <button mat-raised-button color="secondary" style="margin-top: 5px;" type="button" (click)="onInvide()">Share
             ToDo</button>
+        <p *ngIf="errorShare" style="color: red;">Already assigned to this User</p>
     </form>
     <button mat-raised-button color="warn" style="margin-top: 15px;" (click)="onDelete()">Delete</button>
 </div>

@@ -18,7 +18,6 @@ import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { SessionStoreService } from 'src/app/services/session-store.service';
-import { DataSource } from '@angular/cdk/collections';
 
 
 
@@ -44,6 +43,7 @@ export interface EditDialogData {
 export class EditCatetoryDialog {
 
   private fb = inject(FormBuilder);
+  errorShare = false
 
   constructor(
     public dialogRef: MatDialogRef<EditCatetoryDialog>,
@@ -55,28 +55,30 @@ export class EditCatetoryDialog {
     
   }
 
-  editCateroyForm = this.fb.group({
-    title: new FormControl(this.data.title),
-    content: new FormControl(this.data.content),
+  editCategoryForm = this.fb.group({
+    title: new FormControl(this.data.title, Validators.required),
+    content: new FormControl(this.data.content, Validators.required),
     category: new FormControl(this.data.category),
 
   })
 
   onInvide() {
-    const userToShare = this.editCateroyForm.value.category!
+    const userToShare = this.editCategoryForm.value.category!
     const todoForShare = this.data.id
     this.authService.shareToDo(userToShare, todoForShare).subscribe({
       next: _ => {
         this.dialogRef.close();
-      }
+      },error: _ =>{
+        this.errorShare = true
+      } 
     })
   }
   onSubmitEditCategory() {
-    if (this.editCateroyForm.valid) {
+    if (this.editCategoryForm.valid) {
       const id = this.data.id;
-      const title = this.editCateroyForm.value.title!;
-      const content = this.editCateroyForm.value.content!;
-      const category = this.editCateroyForm.value.category!;
+      const title = this.editCategoryForm.value.title!;
+      const content = this.editCategoryForm.value.content!;
+      const category = this.editCategoryForm.value.category!;
       this.todoService.updateToDo(id, title, content).subscribe({
         next: _ => {
           this.data.dataSource.loadToDos()
@@ -173,7 +175,9 @@ export class TodoTableComponent implements AfterViewInit, OnInit {
     })
     this.authService.getAllUsers().subscribe({
       next: users => {
-        this.users.push(...users)
+        const currentUser = this.sesstionService.getUser()?.username
+        
+        this.users.push(...users.filter(user => user.Username != currentUser))
       }
     })
 
