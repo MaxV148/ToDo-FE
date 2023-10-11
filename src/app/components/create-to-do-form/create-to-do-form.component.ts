@@ -1,5 +1,5 @@
 import { DataSource } from '@angular/cdk/collections';
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -9,7 +9,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { TodoService } from 'src/app/services/todo.service';
 import { Category, CreateToDoRequest } from 'src/models/models';
 import { TodoTableDataSource } from '../todo-table/todo-table-datasource';
-import { tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 
 export interface DialogData {
   animal: string;
@@ -57,12 +57,13 @@ export class DialogOverviewExampleDialog {
   templateUrl: './create-to-do-form.component.html',
   styleUrls: ['./create-to-do-form.component.scss']
 })
-export class CreateToDoFormComponent implements OnInit {
+export class CreateToDoFormComponent implements OnInit, OnDestroy {
 
 
   constructor(private categoryService: CategoryService, private todoService: TodoService, public dialog: MatDialog) { }
   public categories: Category[] = []
   dataSource!: TodoTableDataSource;
+  categorySub = new Subscription();
   
 
   private fb = inject(FormBuilder);
@@ -72,7 +73,7 @@ export class CreateToDoFormComponent implements OnInit {
     category: [null, Validators.required]
   });
   ngOnInit(): void {
-    this.categoryService.categorySub.pipe(tap(
+    this.categorySub = this.categoryService.categorySub.pipe(tap(
       ()=> {
         this.categoryService.getAllCategoriesForUser().subscribe({
           next: categoires => {
@@ -83,11 +84,16 @@ export class CreateToDoFormComponent implements OnInit {
     )).subscribe()
     this.categoryService.getAllCategoriesForUser().subscribe({
       next: data => {
+        this.categories.length = 0
         this.categories.push(...data)
       }, error: err => {
         console.log("ERROR: ", err)
       }
     })
+  }
+  ngOnDestroy(): void {
+    this.categories = []
+    this.categorySub.unsubscribe()
   }
 
   onSubmit() {

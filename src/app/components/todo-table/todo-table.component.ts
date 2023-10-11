@@ -176,7 +176,7 @@ export class TodoTableComponent implements AfterViewInit, OnInit {
     this.authService.getAllUsers().subscribe({
       next: users => {
         const currentUser = this.sesstionService.getUser()?.username
-        
+        this.users.length = 0
         this.users.push(...users.filter(user => user.Username != currentUser))
       }
     })
